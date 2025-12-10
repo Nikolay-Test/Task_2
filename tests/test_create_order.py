@@ -33,15 +33,18 @@ class TestCreateOrder:
         assert 'ingredients' in response_data['order']
         assert len(response_data['order']['ingredients']) > 0
 
-    @allure.title('Ошибка создания заказа с некорректными ингредиентами')
-    @pytest.mark.parametrize('body, status_code, success, response_text', Data.INGREDIENTS)
-    def test_order_with_invalid_ingredients_error(self, create_user_with_token, body, status_code, success, response_text):
+    @allure.title('Ошибка создания заказа с пустыми ингредиентами')
+    def test_order_with_empty_ingredients_error(self, create_user_with_token):
+        body, status_code, success, response_text = Data.INGREDIENTS[0]
         response = OrderMethods.create_order(body, create_user_with_token)
-        if status_code == 400:
-            assert response.status_code == 400
-            assert response.json() == {'success': success, 'message': response_text}
-        elif status_code == 500:
-            assert response.status_code == 500
-            assert 'Internal Server Error' in response.text
-            
+        assert response.status_code == status_code
+        assert response.json() == {'success': success, 'message': response_text}
+
+    @allure.title('Ошибка создания заказа с некорректными идентификаторами ингредиентов')
+    def test_order_with_invalid_ingredient_ids_error(self, create_user_with_token):
+        body, status_code, success, response_text = Data.INGREDIENTS[1]
+        response = OrderMethods.create_order(body, create_user_with_token)
+        assert response.status_code == status_code
+        # Проверяем, что в ответе есть текст ошибки (но не проверяем точный формат)
+        assert response_text in response.text
         
