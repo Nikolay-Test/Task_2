@@ -1,0 +1,7 @@
+BASE = 'https://stellarburgers.education-services.ru/'
+REGISTRY = f'{BASE}api/auth/register'
+LOGIN = f'{BASE}api/auth/login'
+USER = f'{BASE}api/auth/user'
+DELETE = f'{BASE}api/auth/user'
+INGREDIENTS = f'{BASE}/api/ingredients'
+ORDER = f'{BASE}api/orders'
